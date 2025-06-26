@@ -1,1 +1,1 @@
-export const BACKEND_URL = "" //add your backend url on which you are running your backend
+export const VITE_BACKEND_URL = "" //add your backend url on which you are running your backend
