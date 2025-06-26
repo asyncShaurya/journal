@@ -12,6 +12,12 @@ export const userRouter = new Hono<{
     }
 }>();
 
+
+userRouter.options('/*', (c) => {
+  return c.text('OK');
+});
+
+
 userRouter.post('/signup', async (c) => {
     const body = await c.req.json();
     const {success} = signupInput.safeParse(body);
