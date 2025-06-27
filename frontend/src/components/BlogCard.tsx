@@ -5,7 +5,7 @@ interface BlogCardProps {
     title: string;
     content: string;
     publishedDate: string;
-    id: number;
+    id: number
 }
 
 export const BlogCard = ({
@@ -13,14 +13,15 @@ export const BlogCard = ({
     authorName,
     title,
     content,
-    publishedDate
+    publishedDate,
+
 }: BlogCardProps) => {
-    return <Link to={`/blog/${id}`}>
+    return(
+         <Link to={`/blog/${id}`}>
         <div className="p-4 border-b border-slate-200 pb-4 w-screen max-w-screen-md cursor-pointer">
             <div className="flex">
                 <Avatar name={authorName} />
-                <div className="font-extralight pl-2 text-sm flex justify-content flex-col">{authorName}
-                </div>
+                <div className="font-extralight pl-2 text-sm flex justify-content flex-col">{authorName}</div>
                 <div className="flex justify-center flex-col pl-2 flex justify-center flex-col">
                     <Circle />
                 </div>
@@ -28,18 +29,15 @@ export const BlogCard = ({
                     {publishedDate}
                 </div>
             </div>
-            <div className="text-xl font-semibold pt-2">
-                {title}
-            </div>
-            <div className="text-md font-thin">
-                {content.slice(0, 100) + "..."}
-            </div>
+
+            <div className="text-xl font-semibold pt-2">{title}</div>
+            <div className="text-md font-thin">{content.slice(0, 100) + "..."}</div>
             <div className="text-slate-500 text-sm font-thin pt-4">
-                {`${Math.ceil(content.length / 100)} minute(s) 
-            read`}
+                {`${Math.ceil(content.length / 100)} minute(s) read`}
             </div>
         </div>
     </Link>
+    )
 }
 
 export function Circle() {

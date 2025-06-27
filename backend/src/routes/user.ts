@@ -1,25 +1,20 @@
 import { Hono } from "hono";
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
-import { sign } from 'hono/jwt'
+import { decode, sign, verify } from 'hono/jwt'
 import { signinInput, signupInput } from "@rangeer/journal";
 
 
 export const userRouter = new Hono<{
     Bindings: {
-        DATABASE_URL: string;
-        JWT_SECRET: string;
+        DATABASE_URL: string,
+        JWT_SECRET: string
     }
 }>();
 
-
-userRouter.options('/*', (c) => {
-  return c.text('OK');
-});
-
-
 userRouter.post('/signup', async (c) => {
     const body = await c.req.json();
+
     const {success} = signupInput.safeParse(body);
     if(!success){
         c.status(411);
@@ -27,6 +22,7 @@ userRouter.post('/signup', async (c) => {
             message:"Inputs not correct"
         })
     }
+
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
@@ -39,20 +35,23 @@ userRouter.post('/signup', async (c) => {
                 name: body.name
             }
         })
+
         const jwt = await sign({
             id: user.id
         }, c.env.JWT_SECRET);
-
         return c.text(jwt)
+
     } catch (e) {
         c.status(411);
-        return c.text('Invalid')
+        return c.text('Invalid Credentials!');
     }
+
 })
 
 
 userRouter.post('/signin', async (c) => {
     const body = await c.req.json();
+
     const {success} = signinInput.safeParse(body);
     if(!success){
         c.status(411);
@@ -72,20 +71,21 @@ userRouter.post('/signin', async (c) => {
                 password: body.password,
             }
         })
+
         if (!user) {
             c.status(403);
             return c.json({
-                message: "Incorrect creds"
+                message: "Incorrect Credentials!"
             })
         }
+
         const jwt = await sign({
             id: user.id
-        }, c.env.JWT_SECRET);
+        }, c.env.JWT_SECRET)
+        return c.text(jwt);
 
-        return c.text(jwt)
     } catch (e) {
-        console.log(e);
         c.status(411);
-        return c.text('Invalid')
+        return c.text('Invalid!');
     }
 })

@@ -6,7 +6,7 @@ import { VITE_BACKEND_URL} from "../config";
 export interface Blog {
     "content": string;
     "title": string;
-    "id": number
+    "id": number;
     "author": {
         "name": string
     }
@@ -19,10 +19,9 @@ export const useBlog = ({ id }: { id: string }) => {
     useEffect(() => {
         axios.get(`${VITE_BACKEND_URL}/api/v1/blog/${id}`, {
             headers: {
-                Authorization: localStorage.getItem("token")
+                Authorization: localStorage.getItem('token')
             }
-        })
-            .then(response => {
+        }) .then(response => {
                 setBlog(response.data.blog);
                 setLoading(false);
             })
@@ -32,7 +31,6 @@ export const useBlog = ({ id }: { id: string }) => {
         loading,
         blog
     }
-
 }
 
 export const useBlogs = () => {
@@ -42,15 +40,13 @@ export const useBlogs = () => {
     useEffect(() => {
         axios.get(`${VITE_BACKEND_URL}/api/v1/blog/bulk`, {
             headers: {
-                Authorization: localStorage.getItem("token")
+                Authorization: localStorage.getItem('token')
             }
-        })
-            .then(response => {
+        }).then(response => {
                 setBlogs(response.data.blogs);
                 setLoading(false);
             })
     }, [])
-
     return {
         loading,
         blogs

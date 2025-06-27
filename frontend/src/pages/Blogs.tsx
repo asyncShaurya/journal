@@ -20,10 +20,11 @@ export const Blogs = () => {
             </div>
         </div>
     }
-    return <div >
-        <Appbar />
+    return (
+         <div >
+           <Appbar />
         <div className="flex justify-center">
-            <div>
+            <div className="max-w-xl">
                 {blogs.map(blog => <BlogCard
                     id={blog.id}
                     authorName={blog.author.name || "Anonymos"}
@@ -34,4 +35,5 @@ export const Blogs = () => {
             </div>
         </div>
     </div>
+    )
 }
